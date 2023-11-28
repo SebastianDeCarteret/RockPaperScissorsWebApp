@@ -1,7 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using RockPaperScissorsWebApp.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<RockPaperScissorsWebAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RockPaperScissorsWebAppContext") ?? throw new InvalidOperationException("Connection string 'RockPaperScissorsWebAppContext' not found.")));
 
 var app = builder.Build();
 
