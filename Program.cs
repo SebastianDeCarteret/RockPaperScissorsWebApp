@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RazorPagesMovie.Models;
 using RockPaperScissorsWebApp.Data;
+using RockPaperScissorsWebApp.Models; // import db models
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +11,13 @@ builder.Services.AddDbContext<RockPaperScissorsWebAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RockPaperScissorsWebAppContext") ?? throw new InvalidOperationException("Connection string 'RockPaperScissorsWebAppContext' not found.")));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope()) // seed db
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
